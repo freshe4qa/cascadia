@@ -65,7 +65,7 @@ fi
 cd $HOME && rm -rf cascadia
 git clone https://github.com/cascadiafoundation/cascadia
 cd cascadia
-git checkout v0.1.1
+git checkout v0.1.2
 make install
 
 # config
@@ -121,7 +121,8 @@ WantedBy=multi-user.target
 EOF
 
 # reset
-cascadiad tendermint unsafe-reset-all
+cascadiad tendermint unsafe-reset-all --home $HOME/.cascadiad --keep-addr-book 
+curl https://snapshots1-testnet.nodejumper.io/cascadia-testnet/cascadia_6102-1_2023-05-10.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
 
 # start service
 sudo systemctl daemon-reload
