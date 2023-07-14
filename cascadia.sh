@@ -62,11 +62,9 @@ source $HOME/.bash_profile
 fi
 
 # download binary
-cd $HOME && rm -rf cascadia
-git clone https://github.com/cascadiafoundation/cascadia
-cd cascadia
-git checkout v0.1.2
-make install
+curl -L https://github.com/CascadiaFoundation/cascadia/releases/download/v0.1.3/cascadiad-v0.1.3-linux-amd64 -o cascadiad
+chmod +x cascadiad
+sudo mv cascadiad /usr/local/bin
 
 # config
 cascadiad config chain-id $CASCADIA_CHAIN_ID
@@ -122,7 +120,7 @@ EOF
 
 # reset
 cascadiad tendermint unsafe-reset-all --home $HOME/.cascadiad --keep-addr-book 
-curl https://snapshots1-testnet.nodejumper.io/cascadia-testnet/cascadia_6102-1_2023-06-16.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
+curl https://snapshots1-testnet.nodejumper.io/cascadia-testnet/cascadia_6102-1_2023-07-14.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
 
 # start service
 sudo systemctl daemon-reload
