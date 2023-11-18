@@ -103,6 +103,12 @@ sed -i "s/snapshot-interval *=.*/snapshot-interval = 0/g" $HOME/.cascadiad/confi
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.cascadiad/config/config.toml
 
+#update
+sed -i "s/^timeout_propose =.*/timeout_propose = \"2.7s\"/" config.toml
+sed -i "s/^timeout_prevote =.*/timeout_prevote = \"0.9s\"/" config.toml
+sed -i "s/^timeout_precommit =.*/timeout_precommit = \"0.9s\"/" config.toml
+sed -i "s/^timeout_commit =.*/timeout_commit = \"3.6s\"/" config.toml
+
 # create service
 sudo tee /etc/systemd/system/cascadiad.service > /dev/null << EOF
 [Unit]
