@@ -41,14 +41,14 @@ fi
 if [ ! $WALLET ]; then
 	echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
-echo "export CASCADIA_CHAIN_ID=cascadia_6102-1" >> $HOME/.bash_profile
+echo "export CASCADIA_CHAIN_ID=cascadia_11029-1" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
 # update
 sudo apt update && sudo apt upgrade -y
 
 # packages
-sudo apt install curl build-essential git wget jq make gcc tmux chrony -y
+apt install curl iptables build-essential git wget jq make gcc nano tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev -y
 
 # install go
 if ! [ -x "$(command -v go)" ]; then
@@ -62,7 +62,7 @@ source $HOME/.bash_profile
 fi
 
 # download binary
-curl -L https://github.com/CascadiaFoundation/cascadia/releases/download/v0.1.8/cascadiad -o cascadiad
+curl -L https://github.com/CascadiaFoundation/cascadia/releases/download/v0.1.9/cascadiad -o cascadiad
 chmod +x cascadiad
 sudo mv cascadiad /usr/local/bin
 
@@ -74,15 +74,16 @@ cascadiad config keyring-backend test
 cascadiad init $NODENAME --chain-id $CASCADIA_CHAIN_ID
 
 # download genesis and addrbook
-wget -O $HOME/.cascadiad/config/genesis.json "https://anode.team/Cascadia/test/genesis.json"
-wget -O $HOME/.cascadiad/config/addrbook.json "https://anode.team/Cascadia/test/addrbook.json"
+curl -LO https://github.com/CascadiaFoundation/chain-configuration/raw/master/testnet/genesis.json.gz
+gunzip genesis.json.gz
+cp genesis.json $HOME/.cascadiad/config/
 
 # set minimum gas price
 sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.025aCC\"|" $HOME/.cascadiad/config/app.toml
 
 # set peers and seeds
 SEEDS=""
-PEERS="63cf1e7583eabf365856027815bc1491f2bc7939@65.108.2.41:60556,47aaa777fff4af6c03372fe9ff52e7afc3132f8c@34.125.205.40:26656,3b389873f999763d3f937f63f765f0948411e296@44.192.85.92:26656,b651ea2a0517e82c1a476e25966ab3de3159afe8@34.229.22.39:26656,a23ddb4174bd434eb134024a9531707d1a8fb7d1@207.246.124.228:26656"
+PEERS="d1ed80e232fc2f3742637daacab454e345bbe475@54.204.246.120:26656,0c96a6c328eb58d1467afff4130ab446c294108c@34.239.67.55:26656"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.cascadiad/config/config.toml
 
 # disable indexing
@@ -103,12 +104,6 @@ sed -i "s/snapshot-interval *=.*/snapshot-interval = 0/g" $HOME/.cascadiad/confi
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.cascadiad/config/config.toml
 
-#update
-sed -i "s/^timeout_propose =.*/timeout_propose = \"2.7s\"/" $HOME/.cascadiad/config/config.toml
-sed -i "s/^timeout_prevote =.*/timeout_prevote = \"0.9s\"/" $HOME/.cascadiad/config/config.toml
-sed -i "s/^timeout_precommit =.*/timeout_precommit = \"0.9s\"/" $HOME/.cascadiad/config/config.toml
-sed -i "s/^timeout_commit =.*/timeout_commit = \"3.6s\"/" $HOME/.cascadiad/config/config.toml
-
 # create service
 sudo tee /etc/systemd/system/cascadiad.service > /dev/null << EOF
 [Unit]
@@ -126,7 +121,6 @@ EOF
 
 # reset
 cascadiad tendermint unsafe-reset-all --home $HOME/.cascadiad --keep-addr-book 
-curl https://snapshots-testnet.nodejumper.io/cascadia-testnet/cascadia-testnet_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
 
 # start service
 sudo systemctl daemon-reload
@@ -155,7 +149,7 @@ cascadiad tx staking create-validator \
 --amount=1000000aCC \
 --pubkey=$(cascadiad tendermint show-validator) \
 --moniker="$NODENAME" \
---chain-id=cascadia_6102-1 \
+--chain-id=cascadia_11029-1 \
 --commission-rate=0.1 \
 --commission-max-rate=0.2 \
 --commission-max-change-rate=0.05 \
