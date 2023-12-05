@@ -74,9 +74,7 @@ cascadiad config keyring-backend test
 cascadiad init $NODENAME --chain-id $CASCADIA_CHAIN_ID
 
 # download genesis and addrbook
-curl -LO https://github.com/CascadiaFoundation/chain-configuration/raw/master/testnet/genesis.json.gz
-gunzip genesis.json.gz
-cp genesis.json $HOME/.cascadiad/config/
+wget -O $HOME/.cascadiad/config/genesis.json "https://github.com/CascadiaFoundation/chain-configuration/blob/master/testnet/genesis.json"
 
 # set minimum gas price
 sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.025aCC\"|" $HOME/.cascadiad/config/app.toml
