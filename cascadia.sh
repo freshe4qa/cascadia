@@ -126,7 +126,7 @@ EOF
 
 # reset
 cascadiad tendermint unsafe-reset-all --home $HOME/.cascadiad --keep-addr-book 
-curl https://snapshots-testnet.nodejumper.io/cascadia-testnet/cascadia_6102-1_2023-11-22.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
+curl https://snapshots-testnet.nodejumper.io/cascadia-testnet/cascadia-testnet_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
 
 # start service
 sudo systemctl daemon-reload
