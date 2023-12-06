@@ -74,7 +74,8 @@ cascadiad config keyring-backend test
 cascadiad init $NODENAME --chain-id $CASCADIA_CHAIN_ID
 
 # download genesis and addrbook
-wget -O $HOME/.cascadiad/config/genesis.json "https://github.com/CascadiaFoundation/chain-configuration/blob/master/testnet/genesis.json"
+curl -L https://raw.githubusercontent.com/CascadiaFoundation/chain-configuration/master/testnet/genesis.json -o ~/.cascadiad/config/genesis.json
+curl -s https://snapshots-testnet.nodejumper.io/cascadia-testnet/addrbook.json > $HOME/.cascadiad/config/addrbook.json
 
 # set minimum gas price
 sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.025aCC\"|" $HOME/.cascadiad/config/app.toml
@@ -119,6 +120,7 @@ EOF
 
 # reset
 cascadiad tendermint unsafe-reset-all --home $HOME/.cascadiad --keep-addr-book 
+curl https://snapshots-testnet.nodejumper.io/cascadia-testnet/cascadia-testnet_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.cascadiad
 
 # start service
 sudo systemctl daemon-reload
