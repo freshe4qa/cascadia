@@ -82,7 +82,7 @@ sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.025aCC\"|" $HOME/
 
 # set peers and seeds
 SEEDS=""
-PEERS="d1ed80e232fc2f3742637daacab454e345bbe475@54.204.246.120:26656,0c96a6c328eb58d1467afff4130ab446c294108c@34.239.67.55:26656"
+PEERS="0c96a6c328eb58d1467afff4130ab446c294108c@34.239.67.55:26656,af73a10430d389e7480ef01b10b763fe156a397d@65.109.56.215:49656,c3fbcfce187a3733f688a945f80499de087d32ed@37.120.189.81:40656,21ca2712116138429aed3d72422379397c53fa86@65.109.65.248:34656,37024590fce8bbfcb0d4de7220967b63b5824d14@95.216.10.232:22256"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.cascadiad/config/config.toml
 
 # disable indexing
