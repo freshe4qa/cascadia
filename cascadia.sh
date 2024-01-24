@@ -62,7 +62,7 @@ source $HOME/.bash_profile
 fi
 
 # download binary
-curl -L https://github.com/CascadiaFoundation/cascadia/releases/download/v0.2.0/cascadiad -o cascadiad
+curl -L https://github.com/CascadiaFoundation/cascadia/releases/download/v0.3.0/cascadiad -o cascadiad
 chmod +x cascadiad
 sudo mv cascadiad /usr/local/bin
 
